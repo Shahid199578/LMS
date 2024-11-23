@@ -1,0 +1,43 @@
+const nodemailer = require('nodemailer');
+const dotenv = require("dotenv");
+dotenv.config();
+
+// Create the transporter object using SMTP transport.
+const sendMail = async (otp, email) => {
+  try {
+    // Configure Nodemailer transport
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Use Gmail as the service
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    // Set the email options (HTML content, subject, etc.)
+    const mailOptions = {
+      from: process.env.EMAIL, // Sender address
+      to: email, // Recipient address
+      subject: 'Reset Password OTP', // Email subject
+      html: <div>Your OTP for resetting the password is: <strong>${otp}</strong></div>, // HTML body content
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    console.log('OTP sent successfully.');
+
+    return { status: true, message: 'OTP sent successfully to your email.' };
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    return { status: false, message: 'Failed to send OTP. Please try again later.' };
+  }
+};
+
+module.exports = sendMail;
+I have this but I want to this for resend otp registration mail verify otp and in future any notification 
+so i want const mailOptions = {
+      from: process.env.EMAIL, // Sender address
+      to: email, // Recipient address
+      subject: 'Reset Password OTP', // Email subject
+      html: <div>Your OTP for resetting the password is: <strong>${otp}</strong></div>, // HTML body content
+    };
